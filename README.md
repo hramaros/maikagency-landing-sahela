@@ -79,8 +79,10 @@ n8n**. Le workflow **« Sahela — Réservations »** :
 1. **Webhook** `POST /webhook/sahela-reservation` — reçoit la demande
 2. **Normalisation** des champs (Set)
 3. **Data Table** « Réservations Sahela » — enregistre chaque demande
-4. **Gmail** — email de notification au salon
-5. **Gmail** (si email fourni) — email de confirmation à la cliente
+4. **Google Agenda** — crée automatiquement l'événement du rendez-vous (créneau
+   d'1 h, fuseau Indian/Antananarivo) sur l'agenda connecté
+5. **Gmail** — email de notification au salon
+6. **Gmail** (si email fourni) — email de confirmation à la cliente
 
 Configuration côté hébergement (Vercel → *Settings → Environment Variables*,
 ou fichier `.env.local` en local) :
