@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkle, Star } from "./icons";
+import { ArrowRight, Star } from "./icons";
 
 const Scene3D = dynamic(() => import("./Scene3D"), {
   ssr: false,
@@ -29,10 +30,10 @@ const stats = [
 ];
 
 const avatars = [
-  { initials: "VR", grad: "from-rose to-rosegold" },
-  { initials: "MA", grad: "from-rosegold to-champagne" },
-  { initials: "HT", grad: "from-rose-deep to-rose" },
-  { initials: "TR", grad: "from-mauve to-rose" },
+  { src: "/gallery/avatars/a1.jpg", name: "Voahirana" },
+  { src: "/gallery/avatars/a2.jpg", name: "Mialy" },
+  { src: "/gallery/avatars/a3.jpg", name: "Hanitra" },
+  { src: "/gallery/avatars/a4.jpg", name: "Tantely" },
 ];
 
 export default function Hero() {
@@ -111,11 +112,16 @@ export default function Hero() {
             <div className="flex -space-x-3">
               {avatars.map((a) => (
                 <span
-                  key={a.initials}
-                  className={`grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br ${a.grad} text-xs font-semibold text-white ring-2 ring-cream`}
-                  aria-hidden="true"
+                  key={a.src}
+                  className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full shadow-sm ring-2 ring-cream"
                 >
-                  {a.initials}
+                  <Image
+                    src={a.src}
+                    alt={`Cliente ${a.name}`}
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                  />
                 </span>
               ))}
             </div>

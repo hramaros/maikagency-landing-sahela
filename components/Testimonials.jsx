@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Reveal from "./Reveal";
 import { Star, Sparkle } from "./icons";
 
@@ -5,51 +6,44 @@ const reviews = [
   {
     name: "Voahirana R.",
     service: "Manucure semi-permanente",
-    initials: "VR",
+    avatar: "/gallery/avatars/a1.jpg",
     text: "Un vrai moment de détente du début à la fin. Ma manucure a tenu plus de trois semaines sans un éclat. Je recommande les yeux fermés !",
-    grad: "from-rose to-rosegold",
   },
   {
     name: "Mialy A.",
     service: "Balayage & soin",
-    initials: "MA",
+    avatar: "/gallery/avatars/a2.jpg",
     text: "Le balayage de mes rêves. L'équipe a parfaitement compris ce que je voulais, et l'accueil était tout simplement adorable. Je ne vais plus ailleurs.",
-    grad: "from-rosegold to-champagne",
   },
   {
     name: "Hanitra T.",
     service: "Maquillage mariée",
-    initials: "HT",
+    avatar: "/gallery/avatars/a3.jpg",
     text: "Un maquillage de mariée sublime qui a tenu toute la journée. J'étais resplendissante sur toutes les photos. Merci infiniment pour votre talent.",
-    grad: "from-rose-deep to-rose",
   },
   {
     name: "Tantely R.",
     service: "Pédicure spa",
-    initials: "TR",
+    avatar: "/gallery/avatars/a4.jpg",
     text: "Le rituel pédicure spa est divin. Mes pieds n'ont jamais été aussi doux et l'ambiance du salon est un vrai cocon. Une parenthèse hors du temps.",
-    grad: "from-mauve to-rose",
   },
   {
     name: "Niaina F.",
     service: "Coiffure événementielle",
-    initials: "NF",
+    avatar: "/gallery/avatars/a5.jpg",
     text: "Coiffée pour le mariage de ma sœur : un chignon tenue parfaite et élégant. Toutes les invitées m'ont demandé l'adresse. Bravo aux artistes !",
-    grad: "from-champagne to-rosegold",
   },
   {
     name: "Lova H.",
     service: "Nail art personnalisé",
-    initials: "LH",
+    avatar: "/gallery/avatars/a6.jpg",
     text: "Des ongles bijoux d'une finesse incroyable. On sent la passion du détail. Le résultat dépasse à chaque fois ce que j'avais imaginé.",
-    grad: "from-rose to-mauve",
   },
   {
     name: "Sarobidy M.",
     service: "Forfait complet",
-    initials: "SM",
+    avatar: "/gallery/avatars/a7.jpg",
     text: "Une journée entière de soins, choyée de la tête aux pieds. Je suis ressortie transformée et apaisée. Sahela, c'est devenu mon rendez-vous beauté.",
-    grad: "from-rosegold to-plum-soft",
   },
 ];
 
@@ -68,11 +62,14 @@ function Card({ r }) {
         {r.text}
       </blockquote>
       <figcaption className="mt-6 flex items-center gap-3 border-t border-plum/10 pt-5">
-        <span
-          className={`grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br ${r.grad} text-sm font-semibold text-white shadow-sm`}
-          aria-hidden="true"
-        >
-          {r.initials}
+        <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full shadow-sm ring-2 ring-white">
+          <Image
+            src={r.avatar}
+            alt={`Portrait de ${r.name}`}
+            fill
+            sizes="44px"
+            className="object-cover"
+          />
         </span>
         <span>
           <span className="block font-semibold text-plum">{r.name}</span>

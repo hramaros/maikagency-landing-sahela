@@ -1,75 +1,77 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./Reveal";
-import { NailPolish, Foot, Scissors, Lipstick, Heart, Sparkle } from "./icons";
+import { Heart, Sparkle } from "./icons";
 
 const categories = ["Tout", "Manucure", "Pédicure", "Coiffure", "Maquillage"];
 
-const motifByCat = {
-  Manucure: NailPolish,
-  Pédicure: Foot,
-  Coiffure: Scissors,
-  Maquillage: Lipstick,
-};
-
 const works = [
   {
-    title: "Nail art floral",
+    title: "Nail art écaille",
     cat: "Manucure",
     likes: 248,
     ratio: "aspect-[4/5]",
-    bg: "radial-gradient(120% 120% at 20% 10%, #f7d9de 0%, #e1899a 55%, #c46b7c 100%)",
+    src: "/gallery/portfolio/manu-ecaille.jpg",
+    alt: "Manucure élégante en vernis noir et écaille de tortue sur une main soignée",
   },
   {
-    title: "Balayage caramel",
+    title: "Couleur lavande",
     cat: "Coiffure",
     likes: 312,
-    ratio: "aspect-square",
-    bg: "radial-gradient(120% 120% at 80% 0%, #ecd2b0 0%, #c98a76 60%, #34203a 100%)",
+    ratio: "aspect-[4/5]",
+    src: "/gallery/portfolio/coif-lavande.jpg",
+    alt: "Longue chevelure ondulée colorée en lavande, réalisée en salon",
   },
   {
-    title: "Make-up mariée",
+    title: "Regard rosé",
     cat: "Maquillage",
     likes: 421,
-    ratio: "aspect-[4/5]",
-    bg: "radial-gradient(120% 120% at 30% 20%, #fbe9ec 0%, #e1899a 45%, #c98a76 100%)",
+    ratio: "aspect-[4/3]",
+    src: "/gallery/portfolio/maq-rose.jpg",
+    alt: "Maquillage des yeux dans des tons roses et lèvres glossy en cours d'application",
   },
   {
-    title: "French chromé",
+    title: "French nude",
     cat: "Manucure",
     likes: 189,
     ratio: "aspect-[4/3]",
-    bg: "linear-gradient(135deg, #f3e9e0 0%, #ecd2b0 45%, #d8b08a 100%)",
+    src: "/gallery/portfolio/manu-nude.jpg",
+    alt: "Manucure naturelle en vernis nude rosé posée sur une fourrure blanche",
   },
   {
-    title: "Chignon bohème",
+    title: "Boucles glamour",
     cat: "Coiffure",
     likes: 276,
     ratio: "aspect-[4/5]",
-    bg: "radial-gradient(120% 120% at 70% 20%, #f7d9de 0%, #c98a76 60%, #241526 100%)",
+    src: "/gallery/portfolio/coif-boucles.jpg",
+    alt: "Mise en forme de boucles soyeuses au fer à boucler doré",
   },
   {
-    title: "Spa & vernis nude",
+    title: "Rituel spa",
     cat: "Pédicure",
     likes: 154,
-    ratio: "aspect-square",
-    bg: "radial-gradient(120% 120% at 20% 80%, #fbe9ec 0%, #ecd2b0 55%, #c98a76 100%)",
+    ratio: "aspect-[4/3]",
+    src: "/gallery/portfolio/pedi-spa.jpg",
+    alt: "Soin spa relaxant aux pierres chaudes et fleurs d'orchidée",
   },
   {
-    title: "Smokey doré",
+    title: "Éclat naturel",
     cat: "Maquillage",
     likes: 358,
-    ratio: "aspect-[4/3]",
-    bg: "linear-gradient(135deg, #34203a 0%, #c46b7c 55%, #d8b08a 100%)",
+    ratio: "aspect-square",
+    src: "/gallery/portfolio/maq-eclat.jpg",
+    alt: "Portrait beauté au teint lumineux et mise en beauté naturelle",
   },
   {
-    title: "Ongles bijoux",
+    title: "Ongles pailletés",
     cat: "Manucure",
     likes: 203,
-    ratio: "aspect-[4/5]",
-    bg: "radial-gradient(120% 120% at 80% 80%, #e1899a 0%, #c98a76 55%, #241526 100%)",
+    ratio: "aspect-square",
+    src: "/gallery/portfolio/manu-paillete.jpg",
+    alt: "Manucure couleur perle et argent pailleté sur un pull douillet",
   },
 ];
 
@@ -129,46 +131,42 @@ export default function Portfolio() {
         {/* Masonry gallery */}
         <motion.div layout className="mt-14 columns-1 gap-5 sm:columns-2 lg:columns-3">
           <AnimatePresence mode="popLayout">
-            {filtered.map((w) => {
-              const Motif = motifByCat[w.cat] || Sparkle;
-              return (
-                <motion.figure
-                  key={w.title}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className={`group relative mb-5 block w-full break-inside-avoid overflow-hidden rounded-3xl ${w.ratio}`}
-                >
-                  {/* gradient artwork */}
-                  <div
-                    className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-                    style={{ background: w.bg }}
-                  />
-                  {/* grain */}
-                  <div className="grain absolute inset-0" />
-                  {/* faint motif */}
-                  <Motif className="absolute -bottom-6 -right-6 h-40 w-40 text-white/15" />
+            {filtered.map((w) => (
+              <motion.figure
+                key={w.title}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className={`group relative mb-5 block w-full break-inside-avoid overflow-hidden rounded-3xl ${w.ratio}`}
+              >
+                {/* real photography */}
+                <Image
+                  src={w.src}
+                  alt={w.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
 
-                  {/* scrim + caption */}
-                  <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-plum/80 via-plum/20 to-transparent p-5">
-                    <div>
-                      <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white backdrop-blur">
-                        {w.cat}
-                      </span>
-                      <h3 className="mt-2 font-display text-2xl font-semibold text-white">
-                        {w.title}
-                      </h3>
-                    </div>
-                    <span className="flex items-center gap-1.5 text-sm text-white/90">
-                      <Heart className="h-4 w-4" />
-                      {w.likes}
+                {/* scrim + caption */}
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-plum/85 via-plum/25 to-transparent p-5">
+                  <div>
+                    <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white backdrop-blur">
+                      {w.cat}
                     </span>
-                  </figcaption>
-                </motion.figure>
-              );
-            })}
+                    <h3 className="mt-2 font-display text-2xl font-semibold text-white drop-shadow-sm">
+                      {w.title}
+                    </h3>
+                  </div>
+                  <span className="flex items-center gap-1.5 text-sm font-medium text-white/90">
+                    <Heart className="h-4 w-4" />
+                    {w.likes}
+                  </span>
+                </figcaption>
+              </motion.figure>
+            ))}
           </AnimatePresence>
         </motion.div>
 
