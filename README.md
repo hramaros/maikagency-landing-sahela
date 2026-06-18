@@ -12,15 +12,17 @@ interactifs** et un design responsive.
 - **Hero 3D interactif** — scène React Three Fiber (sphère organique, anneau
   rose-gold, perles flottantes) avec parallaxe à la souris. 100 % généré par le
   code, donc **libre de droit**, aucune ressource externe.
-- **Sections** — Hero, bandeau défilant, Services (bento), Réalisations
-  (galerie filtrable façon masonry), Avis clientes, Réservation + Contact, Footer.
+- **Sections** — Hero, bandeau défilant, Services (bento asymétrique),
+  Pourquoi Sahela (atouts), Réalisations (galerie filtrable façon masonry),
+  Avis clientes (marquee animé), Réservation + Contact, Footer.
 - **Réservation** — formulaire complet (service, date, créneau, message) relié à
   une API route Next.js (`/api/reservation`) qui transmet la demande à un
   **workflow n8n** (enregistrement + emails). Validation et écran de confirmation inclus.
-- **Design 2026** — glassmorphism, dégradés mesh/aurora, grain, typographie
-  display (Playfair Display) + sans (Manrope), micro-animations Framer Motion.
-- **Responsive** & accessible (préférence `prefers-reduced-motion`, focus visibles,
-  navigation mobile).
+- **Design 2026** — « Soft UI Evolution » : glassmorphism, dégradés mesh/aurora,
+  accent mauve/orchidée, échelle d'ombres douce, grain, typographie display
+  (Playfair Display) + sans (Manrope), micro-animations Framer Motion.
+- **Responsive** & accessible — `prefers-reduced-motion`, focus visibles (clavier),
+  contrastes WCAG AA, libellés de formulaire reliés, navigation mobile + scroll-spy.
 - **SEO** — métadonnées Open Graph/Twitter, favicon SVG, langue `fr`.
 
 ## 🛠️ Stack technique
@@ -57,7 +59,7 @@ app/
   globals.css            # design system (tokens, utilitaires, animations)
   api/reservation/route.js  # endpoint de réservation
 components/
-  Navbar · Hero · Scene3D · Marquee · Services
+  Navbar · Hero · Scene3D · Marquee · Services · WhySahela
   Portfolio · Testimonials · Reservation · Footer
   Reveal · icons          # helpers (reveal au scroll, icônes SVG)
 ```

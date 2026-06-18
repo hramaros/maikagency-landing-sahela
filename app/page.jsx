@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
+import WhySahela from "@/components/WhySahela";
 import Portfolio from "@/components/Portfolio";
 import Testimonials from "@/components/Testimonials";
 import Reservation from "@/components/Reservation";
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <Marquee />
         <Services />
+        <WhySahela />
         <Portfolio />
         <Testimonials />
         <Reservation />

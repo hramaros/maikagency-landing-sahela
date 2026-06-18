@@ -88,9 +88,7 @@ export default function Portfolio() {
         <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-xl">
             <Reveal>
-              <span className="text-xs font-semibold uppercase tracking-luxe text-rose">
-                Nos réalisations
-              </span>
+              <span className="eyebrow text-rose">Nos réalisations</span>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="mt-4 font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -112,8 +110,10 @@ export default function Portfolio() {
               {categories.map((c) => (
                 <button
                   key={c}
+                  type="button"
                   onClick={() => setActive(c)}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                  aria-pressed={active === c}
+                  className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
                     active === c
                       ? "bg-cream text-plum shadow-lg"
                       : "border border-cream/20 text-cream/75 hover:border-cream/50 hover:text-cream"

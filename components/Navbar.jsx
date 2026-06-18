@@ -4,21 +4,43 @@ import { useEffect, useState } from "react";
 import { ArrowRight } from "./icons";
 
 const links = [
-  { href: "#services", label: "Services" },
-  { href: "#realisations", label: "Réalisations" },
-  { href: "#avis", label: "Avis" },
-  { href: "#contact", label: "Contact" },
+  { href: "#services", label: "Services", id: "services" },
+  { href: "#realisations", label: "Réalisations", id: "realisations" },
+  { href: "#avis", label: "Avis", id: "avis" },
+  { href: "#contact", label: "Contact", id: "contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Scroll spy — highlight the section currently in view
+  useEffect(() => {
+    const ids = ["services", "realisations", "avis", "contact"];
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -46,16 +68,24 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-8 text-sm font-medium text-plum/80 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="relative transition-colors hover:text-plum after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-rose after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
+          {links.map((l) => {
+            const isActive = active === l.id;
+            return (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-rose after:transition-all after:duration-300 ${
+                    isActive
+                      ? "text-plum after:w-full"
+                      : "hover:text-plum after:w-0 hover:after:w-full"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="flex items-center gap-3">
@@ -67,7 +97,8 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             type="button"
-            aria-label="Menu"
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="grid h-10 w-10 place-items-center rounded-full border border-plum/15 md:hidden"
           >
@@ -104,7 +135,9 @@ export default function Navbar() {
               <a
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-2xl px-4 py-3 text-plum/85 transition-colors hover:bg-white/60"
+                className={`block rounded-2xl px-4 py-3 transition-colors hover:bg-white/60 ${
+                  active === l.id ? "bg-white/50 text-plum" : "text-plum/85"
+                }`}
               >
                 {l.label}
               </a>

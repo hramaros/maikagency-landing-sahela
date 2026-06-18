@@ -15,7 +15,7 @@ const Scene3D = dynamic(() => import("./Scene3D"), {
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 const item = {
   hidden: { opacity: 0, y: 26 },
@@ -26,6 +26,13 @@ const stats = [
   { value: "4,9/5", label: "Note moyenne" },
   { value: "+12 000", label: "Clientes choyées" },
   { value: "4", label: "Univers beauté" },
+];
+
+const avatars = [
+  { initials: "VR", grad: "from-rose to-rosegold" },
+  { initials: "MA", grad: "from-rosegold to-champagne" },
+  { initials: "HT", grad: "from-rose-deep to-rose" },
+  { initials: "TR", grad: "from-mauve to-rose" },
 ];
 
 export default function Hero() {
@@ -49,7 +56,7 @@ export default function Hero() {
         style={{ animationDelay: "-6s" }}
       />
       <div
-        className="aurora bottom-0 left-1/3 h-72 w-72 animate-drift bg-blush/60"
+        className="aurora bottom-0 left-1/3 h-72 w-72 animate-drift bg-lilac/60"
         style={{ animationDelay: "-12s" }}
       />
 
@@ -58,15 +65,18 @@ export default function Hero() {
         <motion.div variants={container} initial="hidden" animate="show">
           <motion.span
             variants={item}
-            className="inline-flex items-center gap-2 rounded-full border border-plum/12 bg-white/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-luxe text-plum/70 backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-plum/12 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-luxe text-plum/70 shadow-sm backdrop-blur"
           >
-            <Sparkle className="h-3.5 w-3.5 text-rose" />
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-deep" />
+            </span>
             Salon de beauté · Antananarivo
           </motion.span>
 
           <motion.h1
             variants={item}
-            className="mt-6 font-display text-5xl font-semibold leading-[1.05] text-plum sm:text-6xl lg:text-7xl"
+            className="mt-6 font-display text-5xl font-semibold leading-[1.04] text-plum sm:text-6xl lg:text-7xl"
           >
             Révélez l'éclat
             <br />
@@ -93,14 +103,30 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* Trust row */}
-          <motion.div variants={item} className="mt-8 flex items-center gap-3 text-sm text-plum/65">
-            <div className="flex">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <Star key={i} filled className="h-4 w-4 text-gold" />
+          {/* Social proof — avatars + rating above the fold */}
+          <motion.div
+            variants={item}
+            className="mt-9 flex items-center gap-4"
+          >
+            <div className="flex -space-x-3">
+              {avatars.map((a) => (
+                <span
+                  key={a.initials}
+                  className={`grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br ${a.grad} text-xs font-semibold text-white ring-2 ring-cream`}
+                  aria-hidden="true"
+                >
+                  {a.initials}
+                </span>
               ))}
             </div>
-            <span>Recommandé par +320 clientes</span>
+            <div className="text-sm text-plum/70">
+              <div className="flex items-center gap-1">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} filled className="h-4 w-4 text-gold" />
+                ))}
+              </div>
+              <span className="mt-0.5 block">Recommandé par +320 clientes</span>
+            </div>
           </motion.div>
 
           {/* Stats */}

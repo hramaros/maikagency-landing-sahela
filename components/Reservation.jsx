@@ -86,6 +86,8 @@ export default function Reservation() {
 
   const inputClass =
     "w-full rounded-2xl border border-plum/15 bg-white/70 px-4 py-3 text-plum placeholder:text-plum/40 outline-none transition focus:border-rose focus:ring-2 focus:ring-rose/30";
+  const labelClass = "mb-1.5 block text-sm font-medium text-plum/80";
+  const req = <span className="text-rose-deep" aria-hidden="true"> *</span>;
 
   return (
     <section id="reserver" className="relative overflow-hidden bg-cream-deep py-24 sm:py-32">
@@ -97,14 +99,13 @@ export default function Reservation() {
         }}
       />
       <div className="aurora right-[-4rem] top-20 h-80 w-80 bg-rose/30" />
+      <div className="aurora left-[-4rem] bottom-10 h-72 w-72 bg-lilac/40" />
 
       <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-2">
         {/* Left — info */}
         <div id="contact" className="scroll-mt-28">
           <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-luxe text-rose-deep">
-              Réservation
-            </span>
+            <span className="eyebrow text-rose-deep">Réservation</span>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-4 font-display text-4xl font-semibold leading-tight text-plum sm:text-5xl">
@@ -147,7 +148,10 @@ export default function Reservation() {
         <Reveal delay={0.1}>
           <div className="relative rounded-[2.2rem] border border-white/60 bg-white/70 p-7 shadow-[0_30px_70px_-30px_rgba(89,41,58,0.45)] backdrop-blur sm:p-9">
             {status === "success" ? (
-              <div className="flex min-h-[460px] flex-col items-center justify-center text-center">
+              <div
+                className="flex min-h-[460px] flex-col items-center justify-center text-center"
+                aria-live="polite"
+              >
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-rose to-rosegold text-white shadow-glow">
                   <Check className="h-10 w-10" />
                 </span>
@@ -178,7 +182,7 @@ export default function Reservation() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div className="flex items-center gap-2">
                   <Sparkle className="h-5 w-5 text-rose" />
                   <h3 className="font-display text-2xl font-semibold text-plum">
@@ -188,11 +192,14 @@ export default function Reservation() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-plum/80">
-                      Nom complet *
+                    <label htmlFor="res-name" className={labelClass}>
+                      Nom complet{req}
                     </label>
                     <input
+                      id="res-name"
+                      name="name"
                       required
+                      autoComplete="name"
                       value={form.name}
                       onChange={update("name")}
                       placeholder="Votre nom"
@@ -200,12 +207,16 @@ export default function Reservation() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-plum/80">
-                      Téléphone *
+                    <label htmlFor="res-phone" className={labelClass}>
+                      Téléphone{req}
                     </label>
                     <input
+                      id="res-phone"
+                      name="phone"
                       required
                       type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       value={form.phone}
                       onChange={update("phone")}
                       placeholder="+261 ..."
@@ -215,11 +226,15 @@ export default function Reservation() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-plum/80">
+                  <label htmlFor="res-email" className={labelClass}>
                     Email (optionnel)
                   </label>
                   <input
+                    id="res-email"
+                    name="email"
                     type="email"
+                    inputMode="email"
+                    autoComplete="email"
                     value={form.email}
                     onChange={update("email")}
                     placeholder="vous@email.com"
@@ -228,10 +243,12 @@ export default function Reservation() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-plum/80">
-                    Prestation souhaitée *
+                  <label htmlFor="res-service" className={labelClass}>
+                    Prestation souhaitée{req}
                   </label>
                   <select
+                    id="res-service"
+                    name="service"
                     required
                     value={form.service}
                     onChange={update("service")}
@@ -250,10 +267,12 @@ export default function Reservation() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-plum/80">
-                      Date *
+                    <label htmlFor="res-date" className={labelClass}>
+                      Date{req}
                     </label>
                     <input
+                      id="res-date"
+                      name="date"
                       required
                       type="date"
                       min={today}
@@ -263,10 +282,12 @@ export default function Reservation() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-plum/80">
+                    <label htmlFor="res-time" className={labelClass}>
                       Créneau
                     </label>
                     <select
+                      id="res-time"
+                      name="time"
                       value={form.time}
                       onChange={update("time")}
                       className={`${inputClass} appearance-none`}
@@ -282,10 +303,12 @@ export default function Reservation() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-plum/80">
+                  <label htmlFor="res-message" className={labelClass}>
                     Message (optionnel)
                   </label>
                   <textarea
+                    id="res-message"
+                    name="message"
                     rows={3}
                     value={form.message}
                     onChange={update("message")}
@@ -295,7 +318,11 @@ export default function Reservation() {
                 </div>
 
                 {status === "error" && (
-                  <p className="rounded-2xl bg-rose/15 px-4 py-3 text-sm text-rose-deep">
+                  <p
+                    role="alert"
+                    aria-live="assertive"
+                    className="rounded-2xl bg-rose/15 px-4 py-3 text-sm text-rose-deep"
+                  >
                     {error}
                   </p>
                 )}

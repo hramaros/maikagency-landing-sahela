@@ -4,6 +4,7 @@
 /*  Sahela — Design tokens (2026 luxe beauty)                          */
 /* ------------------------------------------------------------------ */
 @theme {
+  /* Core brand */
   --color-ink: #160d16;
   --color-plum: #241526;
   --color-plum-soft: #34203a;
@@ -12,18 +13,29 @@
   --color-blush: #f7d9de;
   --color-blush-soft: #fbe9ec;
   --color-rose: #e1899a;
-  --color-rose-deep: #c46b7c;
+  --color-rose-deep: #b9566b;
   --color-rosegold: #c98a76;
-  --color-gold: #d8b08a;
+  --color-gold: #c9974f;
   --color-champagne: #ecd2b0;
+
+  /* New — dusty orchid / mauve accent bridging rose ↔ plum */
+  --color-mauve: #97739a;
+  --color-mauve-soft: #b89bbb;
+  --color-lilac: #e9dced;
 
   --font-display: var(--font-playfair), ui-serif, Georgia, serif;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
+  /* Soft UI Evolution — consistent elevation scale */
+  --shadow-xs: 0 2px 8px -3px rgba(89, 41, 58, 0.25);
+  --shadow-sm: 0 10px 30px -18px rgba(89, 41, 58, 0.4);
+  --shadow-md: 0 22px 55px -32px rgba(89, 41, 58, 0.5);
+  --shadow-lg: 0 38px 80px -36px rgba(89, 41, 58, 0.55);
   --shadow-soft: 0 18px 50px -20px rgba(89, 41, 58, 0.45);
   --shadow-glow: 0 0 60px -10px rgba(225, 137, 154, 0.55);
 
   --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-card: 2rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -36,7 +48,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
@@ -46,9 +58,35 @@ body {
   overflow-x: hidden;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 ::selection {
   background: var(--color-rose);
   color: #fff;
+}
+
+button:not(:disabled),
+[role="button"],
+label[for] {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Accessible focus — visible only for keyboard users */
+:focus-visible {
+  outline: 2.5px solid var(--color-mauve);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 /* Custom scrollbar */
@@ -70,8 +108,26 @@ body {
   font-family: var(--font-display);
 }
 
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+}
+
+.tracking-luxe {
+  letter-spacing: 0.32em;
+}
+
 .text-gradient-rose {
-  background: linear-gradient(120deg, #e1899a 0%, #c98a76 45%, #d8b08a 100%);
+  background: linear-gradient(120deg, #e1899a 0%, #c98a76 45%, #c9974f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-orchid {
+  background: linear-gradient(120deg, #e1899a 0%, #b07ca6 55%, #8a5e8e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -99,6 +155,39 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Reusable luxe card surface */
+.card-lux {
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(36, 21, 38, 0.08);
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.5s var(--ease-silk), box-shadow 0.5s var(--ease-silk),
+    border-color 0.5s var(--ease-silk);
+}
+.card-lux:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(225, 137, 154, 0.35);
+}
+
+/* Gradient hairline border (premium framing) */
+.border-gradient {
+  position: relative;
+  background-clip: padding-box;
+}
+.border-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(225, 137, 154, 0.7), rgba(151, 115, 154, 0.25), rgba(236, 210, 176, 0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 /* Grain overlay */
 .grain::before {
   content: "";
@@ -118,11 +207,25 @@ body {
   filter: blur(70px);
   opacity: 0.6;
   will-change: transform;
+  pointer-events: none;
 }
 
-/* Reveal on scroll handled by framer-motion; this is a fallback */
-.tracking-luxe {
-  letter-spacing: 0.32em;
+/* Edge fade mask for marquees */
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -144,6 +247,11 @@ body {
   to { transform: translateX(-50%); }
 }
 
+@keyframes marquee-rtl {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -158,6 +266,9 @@ body {
 .animate-float-slow { animation: float-slow 9s var(--ease-silk) infinite; }
 .animate-drift { animation: drift 18s ease-in-out infinite; }
 .animate-marquee { animation: marquee 32s linear infinite; }
+.animate-marquee-rtl { animation: marquee-rtl 38s linear infinite; }
+
+.marquee-row:hover { animation-play-state: paused; }
 
 .shimmer {
   background: linear-gradient(
@@ -170,38 +281,64 @@ body {
   animation: shimmer 3.5s linear infinite;
 }
 
-/* Buttons */
+/* ------------------------------------------------------------------ */
+/*  Buttons                                                            */
+/* ------------------------------------------------------------------ */
 .btn-primary {
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   border-radius: 999px;
   padding: 1rem 2rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(120deg, #e1899a, #c98a76 70%, #d8b08a);
-  box-shadow: 0 14px 34px -12px rgba(196, 107, 124, 0.7);
+  background: linear-gradient(120deg, #e1899a, #c98a76 70%, #c9974f);
+  box-shadow: 0 14px 34px -12px rgba(185, 86, 107, 0.7);
   transition: transform 0.4s var(--ease-silk), box-shadow 0.4s var(--ease-silk);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* shine sweep */
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, 0.45) 50%, transparent 75%);
+  background-size: 220% 100%;
+  background-position: 200% center;
+  transition: background-position 0.7s var(--ease-silk);
 }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 22px 44px -12px rgba(196, 107, 124, 0.85);
+  box-shadow: 0 22px 44px -12px rgba(185, 86, 107, 0.85);
+}
+.btn-primary:hover::after {
+  background-position: -120% center;
+}
+.btn-primary:focus-visible {
+  outline: 2.5px solid var(--color-plum);
+  outline-offset: 3px;
 }
 
 .btn-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   border-radius: 999px;
   padding: 1rem 2rem;
   font-weight: 600;
   border: 1px solid rgba(36, 21, 38, 0.18);
-  transition: background 0.4s var(--ease-silk), border-color 0.4s var(--ease-silk);
+  transition: background 0.4s var(--ease-silk), border-color 0.4s var(--ease-silk),
+    transform 0.4s var(--ease-silk);
 }
 .btn-ghost:hover {
   background: rgba(255, 255, 255, 0.6);
   border-color: rgba(36, 21, 38, 0.3);
+  transform: translateY(-2px);
 }
 
 @media (prefers-reduced-motion: reduce) {
