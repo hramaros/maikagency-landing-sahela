@@ -15,7 +15,8 @@ interactifs** et un design responsive.
 - **Sections** — Hero, bandeau défilant, Services (bento), Réalisations
   (galerie filtrable façon masonry), Avis clientes, Réservation + Contact, Footer.
 - **Réservation** — formulaire complet (service, date, créneau, message) relié à
-  une API route Next.js (`/api/reservation`) avec validation et état de confirmation.
+  une API route Next.js (`/api/reservation`) qui transmet la demande à un
+  **workflow n8n** (enregistrement + emails). Validation et écran de confirmation inclus.
 - **Design 2026** — glassmorphism, dégradés mesh/aurora, grain, typographie
   display (Playfair Display) + sans (Manrope), micro-animations Framer Motion.
 - **Responsive** & accessible (préférence `prefers-reduced-motion`, focus visibles,
@@ -66,8 +67,30 @@ components/
 - **Contenu** (services, prix, avis, adresse, téléphone) : éditable directement
   dans les composants de `components/`. Les prix et coordonnées sont des exemples.
 - **Couleurs / polices** : centralisées dans `app/globals.css` (bloc `@theme`).
-- **Réservation** : brancher l'envoi d'email / CRM / base de données dans
-  `app/api/reservation/route.js` (point d'intégration indiqué en commentaire).
+- **Réservation** : la demande est transmise à n8n (voir ci-dessous). Pour
+  changer d'instance, définir `N8N_WEBHOOK_URL` (cf. `.env.example`).
+
+## 📨 Réservations & emails (n8n)
+
+Le formulaire de réservation envoie les données à l'API route
+`app/api/reservation/route.js`, qui les transmet (côté serveur) à un **webhook
+n8n**. Le workflow **« Sahela — Réservations »** :
+
+1. **Webhook** `POST /webhook/sahela-reservation` — reçoit la demande
+2. **Normalisation** des champs (Set)
+3. **Data Table** « Réservations Sahela » — enregistre chaque demande
+4. **Gmail** — email de notification au salon
+5. **Gmail** (si email fourni) — email de confirmation à la cliente
+
+Configuration côté hébergement (Vercel → *Settings → Environment Variables*,
+ou fichier `.env.local` en local) :
+
+```bash
+N8N_WEBHOOK_URL=https://n8n.maikagency.dev/webhook/sahela-reservation
+```
+
+> Les emails partent du compte Gmail connecté dans n8n. L'adresse de
+> notification du salon se règle dans le nœud « Email au salon ».
 
 ---
 
