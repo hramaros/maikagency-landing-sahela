@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Reveal from "./Reveal";
 import { Star, Sparkle, Check, Heart } from "./icons";
 
@@ -47,6 +48,31 @@ export default function WhySahela() {
                   Bien plus qu'un salon : une promesse de soin, de confiance et de
                   bien-être à chacune de vos visites.
                 </p>
+              </Reveal>
+
+              {/* Ambiance photo + floating rating */}
+              <Reveal delay={0.15}>
+                <div className="relative mt-8 overflow-hidden rounded-[1.75rem] border border-white/70 shadow-[0_24px_55px_-28px_rgba(89,41,58,0.55)]">
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src="/gallery/salon-rose.jpg"
+                      alt="Espace chaleureux du salon Sahela avec ses fauteuils roses et ses miroirs"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 360px"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-plum/35 to-transparent" />
+                  </div>
+                  <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-2xl glass px-4 py-3 shadow-sm">
+                    <div className="flex">
+                      {[0, 1, 2, 3, 4].map((i) => (
+                        <Star key={i} filled className="h-4 w-4 text-gold" />
+                      ))}
+                    </div>
+                    <span className="text-sm font-semibold text-plum">4,9/5</span>
+                    <span className="text-sm text-plum/60">· clientes ravies</span>
+                  </div>
+                </div>
               </Reveal>
             </div>
 
