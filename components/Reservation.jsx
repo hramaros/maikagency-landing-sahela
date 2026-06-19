@@ -142,6 +142,20 @@ export default function Reservation() {
               );
             })}
           </div>
+
+          {/* Map */}
+          <Reveal delay={0.4}>
+            <div className="mt-5 overflow-hidden rounded-3xl border border-plum/10 shadow-sm">
+              <iframe
+                title="Carte de localisation du salon Sahela à Antaninarenina, Antananarivo"
+                src="https://maps.google.com/maps?q=Antaninarenina%2C%20Antananarivo&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="block h-64 w-full"
+                style={{ border: 0 }}
+              />
+            </div>
+          </Reveal>
         </div>
 
         {/* Right — form / success */}

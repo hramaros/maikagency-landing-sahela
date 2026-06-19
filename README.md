@@ -12,11 +12,11 @@ interactifs** et un design responsive.
 - **Hero 3D interactif** — scène React Three Fiber (sphère organique, anneau
   rose-gold, perles flottantes) avec parallaxe à la souris. 100 % généré par le
   code, donc **libre de droit**, aucune ressource externe.
-- **Sections** — Hero, bandeau défilant, Services (bento asymétrique avec
-  photos), Pourquoi Sahela (atouts + ambiance), Réalisations (galerie filtrable
-  façon masonry, vraies photos), **L'écrin Sahela** (section immersive
-  d'ambiance), Avis clientes (marquee animé, portraits), Réservation + Contact,
-  Footer.
+- **Sections** — Hero, bandeau défilant, Services (bento avec photos), Pourquoi
+  Sahela (atouts + ambiance), Réalisations (galerie masonry, vraies photos),
+  **L'écrin Sahela** (ambiance immersive), **Notre équipe** (portraits des
+  expertes), Avis clientes (marquee, portraits), **FAQ** (accordéon accessible),
+  Réservation + Contact avec **carte Google Maps**, Footer.
 - **Photographie libre de droit** — toutes les images (galerie, services,
   portraits d'avis, ambiance du salon) proviennent d'[Unsplash](https://unsplash.com)
   sous **licence Unsplash** (usage commercial, sans attribution obligatoire),
@@ -67,10 +67,10 @@ app/
   api/reservation/route.js  # endpoint de réservation
 components/
   Navbar · Hero · Scene3D · Marquee · Services · WhySahela
-  Portfolio · Experience · Testimonials · Reservation · Footer
+  Portfolio · Experience · Team · Testimonials · Faq · Reservation · Footer
   Reveal · icons          # helpers (reveal au scroll, icônes SVG)
 public/gallery/           # photos libres de droit (Unsplash) + CREDITS.md
-  portfolio/ · services/ · avatars/ · salon-*.jpg
+  portfolio/ · services/ · team/ · avatars/ · salon-*.jpg
 ```
 
 ## 🎨 Personnalisation

@@ -16,5 +16,6 @@ celles-ci seront disponibles (mêmes noms de fichiers pour un remplacement direc
 | ------------ | -------------------------------------------------- |
 | `portfolio/` | Galerie « Nos réalisations »                       |
 | `services/`  | Vignettes des cartes « Nos services »              |
+| `team/`      | Portraits de la section « Notre équipe »           |
 | `avatars/`   | Portraits des avis clientes + preuve sociale Hero  |
 | racine       | Photos d'ambiance du salon (`salon-*.jpg`)         |
