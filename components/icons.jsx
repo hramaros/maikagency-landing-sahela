@@ -137,3 +137,11 @@ export function Check(props) {
     </svg>
   );
 }
+
+export function ChevronDown(props) {
+  return (
+    <svg viewBox="0 0 24 24" {...base} {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
