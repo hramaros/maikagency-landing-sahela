@@ -8,8 +8,6 @@ import {
   Check,
   ChevronDown,
   Clock,
-  MapPin,
-  Phone,
   Sparkle,
   Spinner,
 } from "./icons";
@@ -28,16 +26,6 @@ const SLOTS = ["09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "1
 const today = new Date().toISOString().slice(0, 10);
 
 const infos = [
-  {
-    icon: MapPin,
-    label: "Adresse",
-    value: "Lot II, Antaninarenina\n101 Antananarivo, Madagascar",
-  },
-  {
-    icon: Phone,
-    label: "Téléphone",
-    value: "+261 34 00 000 00",
-  },
   {
     icon: Clock,
     label: "Horaires",

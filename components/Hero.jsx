@@ -178,16 +178,10 @@ export default function Hero() {
           animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative h-[360px] w-full sm:h-[460px] lg:h-[600px]"
+          aria-hidden="true"
         >
           {enrich ? <Scene3D /> : <HeroVisualFallback />}
         </motion.div>
-      </div>
-
-      {/* Scroll cue */}
-      <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:block">
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border border-plum/25 p-1.5">
-          <span className="h-2 w-1 animate-bounce rounded-full bg-plum/50" />
-        </div>
       </div>
     </section>
   );

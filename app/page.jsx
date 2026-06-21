@@ -4,7 +4,6 @@ import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
 import WhySahela from "@/components/WhySahela";
 import Portfolio from "@/components/Portfolio";
-import Experience from "@/components/Experience";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
 import Faq from "@/components/Faq";
@@ -28,7 +27,6 @@ export default function Home() {
         <Services />
         <WhySahela />
         <Portfolio />
-        <Experience />
         <Team />
         <Testimonials />
         <Faq />
