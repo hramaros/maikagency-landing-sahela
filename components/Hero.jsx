@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Star } from "./icons";
 
-const SketchfabEmbed = dynamic(() => import("./SketchfabEmbed"), {
+const Scene3D = dynamic(() => import("./Scene3D"), {
   ssr: false,
   loading: () => <HeroVisualFallback />,
 });
@@ -192,9 +192,9 @@ export default function Hero() {
         >
           {enrich ? (
             <>
-              <SketchfabEmbed />
-              <div className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 rounded-full glass px-4 py-2 text-xs font-medium text-plum/70 shadow-soft">
-                Glissez pour faire pivoter ✦ scène 3D interactive
+              <Scene3D />
+              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full glass px-4 py-2 text-xs font-medium text-plum/70 shadow-soft">
+                Bougez votre souris ✦ scène interactive
               </div>
             </>
           ) : (
