@@ -63,20 +63,21 @@ export default function Scene3D() {
       style={{ background: "transparent" }}
     >
       <Suspense fallback={null}>
-        <ambientLight intensity={0.6} />
-        <directionalLight
-          position={[5, 5, 5]}
-          intensity={1.1}
-          color="#ffd9e0"
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-        />
-        <directionalLight position={[-5, -2, 2]} intensity={0.5} color="#d8b08a" />
-        <pointLight position={[0, 0, 3]} intensity={1.1} color="#ffffff" />
+        <group scale={1.6}>
+          <ambientLight intensity={0.6} />
+          <directionalLight
+            position={[5, 5, 5]}
+            intensity={1.1}
+            color="#ffd9e0"
+            castShadow
+            shadow-mapSize={[1024, 1024]}
+          />
+          <directionalLight position={[-5, -2, 2]} intensity={0.5} color="#d8b08a" />
+          <pointLight position={[0, 0, 3]} intensity={1.1} color="#ffffff" />
 
-        <LipstickModel />
+          <LipstickModel />
 
-        <Environment resolution={256}>
+          <Environment resolution={256}>
           <Lightformer
             intensity={2}
             color="#ffd9e0"
@@ -96,6 +97,7 @@ export default function Scene3D() {
             scale={[5, 5, 1]}
           />
         </Environment>
+        </group>
       </Suspense>
     </Canvas>
   );
