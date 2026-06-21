@@ -94,20 +94,9 @@ export default function Hero() {
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Text column */}
         <motion.div variants={container} initial="hidden" animate="show">
-          <motion.span
-            variants={item}
-            className="inline-flex items-center gap-2 rounded-full border border-plum/12 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-luxe text-plum/70 shadow-sm backdrop-blur"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-deep" />
-            </span>
-            Salon de beauté · Antananarivo
-          </motion.span>
-
           <motion.h1
             variants={item}
-            className="mt-6 font-display text-5xl font-semibold leading-[1.04] text-plum sm:text-6xl lg:text-7xl"
+            className="font-display text-5xl font-semibold leading-[1.04] text-plum sm:text-6xl lg:text-7xl"
           >
             Révélez l'éclat
             <br />
@@ -190,16 +179,7 @@ export default function Hero() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative h-[360px] w-full sm:h-[460px] lg:h-[600px]"
         >
-          {enrich ? (
-            <>
-              <Scene3D />
-              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full glass px-4 py-2 text-xs font-medium text-plum/70 shadow-soft">
-                Bougez votre souris ✦ scène interactive
-              </div>
-            </>
-          ) : (
-            <HeroVisualFallback />
-          )}
+          {enrich ? <Scene3D /> : <HeroVisualFallback />}
         </motion.div>
       </div>
 
