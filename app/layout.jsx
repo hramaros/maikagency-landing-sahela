@@ -1,5 +1,6 @@
 import { Playfair_Display, Manrope } from "next/font/google";
 import "./globals.css";
+import MotionProvider from "@/components/MotionProvider";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -74,7 +75,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${playfair.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

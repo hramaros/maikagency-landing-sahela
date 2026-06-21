@@ -73,7 +73,7 @@ function Card({ r }) {
         </span>
         <span>
           <span className="block font-semibold text-plum">{r.name}</span>
-          <span className="block text-sm text-plum/55">{r.service}</span>
+          <span className="block text-sm text-plum/65">{r.service}</span>
         </span>
       </figcaption>
     </figure>
@@ -109,7 +109,7 @@ export default function Testimonials() {
             <span className="text-sm font-semibold text-plum">
               4,9 / 5
             </span>
-            <span className="text-sm text-plum/55">— plus de 320 avis vérifiés</span>
+            <span className="text-sm text-plum/65">— plus de 320 avis vérifiés</span>
           </div>
         </Reveal>
       </div>
@@ -133,7 +133,7 @@ export default function Testimonials() {
       </div>
 
       <Reveal delay={0.1}>
-        <p className="mt-12 flex items-center justify-center gap-2 text-sm text-plum/60">
+        <p className="mt-12 flex items-center justify-center gap-2 text-sm text-plum/65">
           <Sparkle className="h-4 w-4 text-rose" />
           Rejoignez nos clientes comblées — votre tour de briller approche.
         </p>

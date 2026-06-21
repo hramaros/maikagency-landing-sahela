@@ -92,7 +92,7 @@ export default function Experience() {
                   Réserver une visite
                   <ArrowRight className="h-4 w-4" />
                 </a>
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-plum/60">
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-plum/65">
                   <Sparkle className="h-4 w-4 text-rose" />
                   Premier rendez-vous ? On vous guide.
                 </span>

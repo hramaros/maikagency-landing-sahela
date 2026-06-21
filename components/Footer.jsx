@@ -107,7 +107,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-3 pt-7 text-sm text-cream/50 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-3 pt-7 text-sm text-cream/70 sm:flex-row">
           <p>© {new Date().getFullYear()} Sahela. Tous droits réservés.</p>
           <p>
             Conçu avec <span className="text-rose">♥</span> par Maik Agency

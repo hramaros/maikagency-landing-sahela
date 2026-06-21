@@ -2,17 +2,30 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Star } from "./icons";
 
-const Scene3D = dynamic(() => import("./Scene3D"), {
+const SketchfabEmbed = dynamic(() => import("./SketchfabEmbed"), {
   ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 grid place-items-center">
-      <div className="h-64 w-64 animate-drift rounded-full bg-gradient-to-br from-rose/70 via-rosegold/60 to-champagne/60 blur-2xl" />
-    </div>
-  ),
+  loading: () => <HeroVisualFallback />,
 });
+
+/* Lightweight, motion-free decorative orb — used on small screens,
+   reduced-motion, and as the 3D loading state. No WebGL cost. */
+function HeroVisualFallback() {
+  return (
+    <div className="absolute inset-0 grid place-items-center" aria-hidden="true">
+      <div className="relative h-72 w-72 sm:h-80 sm:w-80">
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-rose via-rosegold to-champagne shadow-glow" />
+        <div className="absolute inset-6 rounded-full bg-gradient-to-tr from-white/70 via-transparent to-transparent mix-blend-overlay" />
+        <div className="absolute -right-2 top-8 h-12 w-12 rounded-full bg-lilac/80 blur-[2px]" />
+        <div className="absolute -left-3 bottom-12 h-8 w-8 rounded-full bg-blush shadow-sm" />
+        <div className="absolute right-10 -bottom-2 h-5 w-5 rounded-full bg-champagne shadow-sm" />
+      </div>
+    </div>
+  );
+}
 
 const container = {
   hidden: {},
@@ -37,6 +50,23 @@ const avatars = [
 ];
 
 export default function Hero() {
+  const reduce = useReducedMotion();
+  // Only mount the WebGL scene on large screens with motion enabled —
+  // saves significant CPU/GPU on phones and respects reduced-motion.
+  const [enrich, setEnrich] = useState(false);
+  useEffect(() => {
+    const big = window.matchMedia("(min-width: 1024px)");
+    const motionOk = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const update = () => setEnrich(big.matches && motionOk.matches);
+    update();
+    big.addEventListener("change", update);
+    motionOk.addEventListener("change", update);
+    return () => {
+      big.removeEventListener("change", update);
+      motionOk.removeEventListener("change", update);
+    };
+  }, []);
+
   return (
     <section
       id="accueil"
@@ -145,7 +175,7 @@ export default function Hero() {
                 <dt className="font-display text-3xl font-semibold text-plum">
                   {s.value}
                 </dt>
-                <dd className="mt-1 text-xs uppercase tracking-wide text-plum/55">
+                <dd className="mt-1 text-xs uppercase tracking-wide text-plum/70">
                   {s.label}
                 </dd>
               </div>
@@ -155,15 +185,21 @@ export default function Hero() {
 
         {/* 3D column */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+          animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative h-[360px] w-full sm:h-[460px] lg:h-[600px]"
         >
-          <Scene3D />
-          <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full glass px-4 py-2 text-xs font-medium text-plum/70 shadow-soft">
-            Bougez votre souris ✦ scène interactive
-          </div>
+          {enrich ? (
+            <>
+              <SketchfabEmbed />
+              <div className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 rounded-full glass px-4 py-2 text-xs font-medium text-plum/70 shadow-soft">
+                Glissez pour faire pivoter ✦ scène 3D interactive
+              </div>
+            </>
+          ) : (
+            <HeroVisualFallback />
+          )}
         </motion.div>
       </div>
 

@@ -30,13 +30,25 @@ export default function Navbar() {
       .filter(Boolean);
     if (!sections.length) return;
 
+    // Track every section's ratio so the most-visible one wins
+    // (deterministic — avoids "last entry" flicker when several overlap).
+    const ratios = new Map();
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
+          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
         });
+        let best = "";
+        let max = 0;
+        ratios.forEach((ratio, id) => {
+          if (ratio > max) {
+            max = ratio;
+            best = id;
+          }
+        });
+        if (best) setActive(best);
       },
-      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
 
     sections.forEach((s) => observer.observe(s));

@@ -1,8 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
-import { ArrowRight, Check, Clock, MapPin, Phone, Sparkle } from "./icons";
+import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  Clock,
+  MapPin,
+  Phone,
+  Sparkle,
+  Spinner,
+} from "./icons";
 
 const SERVICES = [
   "Manucure",
@@ -35,6 +45,37 @@ const infos = [
   },
 ];
 
+/* ---- Validation (client-side, accessible) ---- */
+function validateField(key, value) {
+  const v = (value || "").trim();
+  switch (key) {
+    case "name":
+      if (!v) return "Merci d'indiquer votre nom.";
+      if (v.length < 2) return "Nom trop court.";
+      return "";
+    case "phone":
+      if (!v) return "Numéro requis pour la confirmation.";
+      if (!/^[+0-9][0-9\s().-]{6,}$/.test(v)) return "Numéro de téléphone invalide.";
+      return "";
+    case "email":
+      if (!v) return ""; // optional
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Adresse email invalide.";
+      return "";
+    case "service":
+      if (!v) return "Choisissez une prestation.";
+      return "";
+    case "date":
+      if (!v) return "Sélectionnez une date.";
+      if (v < today) return "La date doit être à venir.";
+      return "";
+    default:
+      return "";
+  }
+}
+
+const REQUIRED_FIELDS = ["name", "phone", "email", "service", "date"];
+const FIELD_ORDER = ["name", "phone", "email", "service", "date", "time"];
+
 export default function Reservation() {
   const [form, setForm] = useState({
     name: "",
@@ -45,14 +86,58 @@ export default function Reservation() {
     time: "",
     message: "",
   });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [error, setError] = useState("");
+  const fieldRefs = useRef({});
 
-  const update = (key) => (e) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setRef = (key) => (el) => {
+    if (el) fieldRefs.current[key] = el;
+  };
+
+  const update = (key) => (e) => {
+    const value = e.target.value;
+    setForm((f) => ({ ...f, [key]: value }));
+    // Re-validate live only once the field has been touched (avoid nagging).
+    if (touched[key]) {
+      setErrors((prev) => ({ ...prev, [key]: validateField(key, value) }));
+    }
+  };
+
+  const handleBlur = (key) => () => {
+    setTouched((t) => ({ ...t, [key]: true }));
+    setErrors((prev) => ({ ...prev, [key]: validateField(key, form[key]) }));
+  };
+
+  function validateAll() {
+    const next = {};
+    REQUIRED_FIELDS.forEach((k) => {
+      const msg = validateField(k, form[k]);
+      if (msg) next[k] = msg;
+    });
+    return next;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    const found = validateAll();
+    if (Object.keys(found).length) {
+      setErrors(found);
+      setTouched((t) => {
+        const all = { ...t };
+        Object.keys(found).forEach((k) => (all[k] = true));
+        return all;
+      });
+      // Focus the first invalid field in visual order.
+      const firstInvalid = FIELD_ORDER.find((k) => found[k]);
+      if (firstInvalid && fieldRefs.current[firstInvalid]) {
+        fieldRefs.current[firstInvalid].focus();
+      }
+      return;
+    }
+
     setStatus("loading");
     setError("");
     try {
@@ -80,14 +165,42 @@ export default function Reservation() {
       time: "",
       message: "",
     });
+    setErrors({});
+    setTouched({});
     setStatus("idle");
     setError("");
   }
 
-  const inputClass =
-    "w-full rounded-2xl border border-plum/15 bg-white/70 px-4 py-3 text-plum placeholder:text-plum/40 outline-none transition focus:border-rose focus:ring-2 focus:ring-rose/30";
+  const baseInput =
+    "w-full rounded-2xl border px-4 py-3 text-plum placeholder:text-plum/45 outline-none transition-all duration-200 focus:ring-2 focus:bg-white";
+  const fieldClass = (key) =>
+    `${baseInput} ${
+      errors[key]
+        ? "border-rose-deep bg-rose/[0.05] focus:border-rose-deep focus:ring-rose-deep/25"
+        : "border-plum/15 bg-white/70 hover:border-plum/25 focus:border-rose focus:ring-rose/30"
+    }`;
   const labelClass = "mb-1.5 block text-sm font-medium text-plum/80";
-  const req = <span className="text-rose-deep" aria-hidden="true"> *</span>;
+  const req = (
+    <span className="text-rose-deep" aria-hidden="true">
+      {" "}
+      *
+    </span>
+  );
+
+  // Accessible inline error row
+  const FieldError = ({ name }) =>
+    errors[name] ? (
+      <p
+        id={`${name}-error`}
+        role="alert"
+        className="mt-1.5 flex items-center gap-1.5 text-sm text-rose-deep"
+      >
+        <span aria-hidden="true">⚠</span>
+        {errors[name]}
+      </p>
+    ) : null;
+
+  const describedBy = (name) => (errors[name] ? `${name}-error` : undefined);
 
   return (
     <section id="reserver" className="relative overflow-hidden bg-cream-deep py-24 sm:py-32">
@@ -114,7 +227,7 @@ export default function Reservation() {
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mt-5 max-w-md text-lg text-plum/65">
+            <p className="mt-5 max-w-md text-lg text-plum/70">
               Réservez votre rendez-vous en moins d'une minute. Nous vous
               confirmons votre créneau par téléphone, avec le sourire.
             </p>
@@ -162,17 +275,25 @@ export default function Reservation() {
         <Reveal delay={0.1}>
           <div className="relative rounded-[2.2rem] border border-white/60 bg-white/70 p-7 shadow-[0_30px_70px_-30px_rgba(89,41,58,0.45)] backdrop-blur sm:p-9">
             {status === "success" ? (
-              <div
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="flex min-h-[460px] flex-col items-center justify-center text-center"
                 aria-live="polite"
               >
-                <span className="grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-rose to-rosegold text-white shadow-glow">
+                <motion.span
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 220, damping: 16, delay: 0.1 }}
+                  className="grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-rose to-rosegold text-white shadow-glow"
+                >
                   <Check className="h-10 w-10" />
-                </span>
+                </motion.span>
                 <h3 className="mt-6 font-display text-3xl font-semibold text-plum">
                   Merci {form.name.split(" ")[0]} !
                 </h3>
-                <p className="mt-3 max-w-sm text-plum/70">
+                <p className="mt-3 max-w-sm text-plum/75">
                   Votre demande pour un rendez-vous{" "}
                   <strong className="text-plum">{form.service || "beauté"}</strong>
                   {form.date && (
@@ -194,9 +315,9 @@ export default function Reservation() {
                 <button onClick={reset} className="btn-ghost mt-8 text-plum">
                   Faire une autre demande
                 </button>
-              </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="flex items-center gap-2">
                   <Sparkle className="h-5 w-5 text-rose" />
                   <h3 className="font-display text-2xl font-semibold text-plum">
@@ -210,32 +331,42 @@ export default function Reservation() {
                       Nom complet{req}
                     </label>
                     <input
+                      ref={setRef("name")}
                       id="res-name"
                       name="name"
-                      required
                       autoComplete="name"
+                      aria-required="true"
+                      aria-invalid={errors.name ? "true" : undefined}
+                      aria-describedby={describedBy("name")}
                       value={form.name}
                       onChange={update("name")}
+                      onBlur={handleBlur("name")}
                       placeholder="Votre nom"
-                      className={inputClass}
+                      className={fieldClass("name")}
                     />
+                    <FieldError name="name" />
                   </div>
                   <div>
                     <label htmlFor="res-phone" className={labelClass}>
                       Téléphone{req}
                     </label>
                     <input
+                      ref={setRef("phone")}
                       id="res-phone"
                       name="phone"
-                      required
                       type="tel"
                       inputMode="tel"
                       autoComplete="tel"
+                      aria-required="true"
+                      aria-invalid={errors.phone ? "true" : undefined}
+                      aria-describedby={describedBy("phone")}
                       value={form.phone}
                       onChange={update("phone")}
+                      onBlur={handleBlur("phone")}
                       placeholder="+261 ..."
-                      className={inputClass}
+                      className={fieldClass("phone")}
                     />
+                    <FieldError name="phone" />
                   </div>
                 </div>
 
@@ -244,39 +375,57 @@ export default function Reservation() {
                     Email (optionnel)
                   </label>
                   <input
+                    ref={setRef("email")}
                     id="res-email"
                     name="email"
                     type="email"
                     inputMode="email"
                     autoComplete="email"
+                    aria-invalid={errors.email ? "true" : undefined}
+                    aria-describedby={describedBy("email")}
                     value={form.email}
                     onChange={update("email")}
+                    onBlur={handleBlur("email")}
                     placeholder="vous@email.com"
-                    className={inputClass}
+                    className={fieldClass("email")}
                   />
+                  <FieldError name="email" />
                 </div>
 
                 <div>
                   <label htmlFor="res-service" className={labelClass}>
                     Prestation souhaitée{req}
                   </label>
-                  <select
-                    id="res-service"
-                    name="service"
-                    required
-                    value={form.service}
-                    onChange={update("service")}
-                    className={`${inputClass} appearance-none`}
-                  >
-                    <option value="" disabled>
-                      Choisir une prestation
-                    </option>
-                    {SERVICES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
+                  <div className="relative">
+                    <select
+                      ref={setRef("service")}
+                      id="res-service"
+                      name="service"
+                      aria-required="true"
+                      aria-invalid={errors.service ? "true" : undefined}
+                      aria-describedby={describedBy("service")}
+                      value={form.service}
+                      onChange={update("service")}
+                      onBlur={handleBlur("service")}
+                      className={`${fieldClass("service")} appearance-none pr-11 ${
+                        form.service ? "" : "text-plum/45"
+                      }`}
+                    >
+                      <option value="" disabled>
+                        Choisir une prestation
                       </option>
-                    ))}
-                  </select>
+                      {SERVICES.map((s) => (
+                        <option key={s} value={s} className="text-plum">
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-plum/55"
+                    />
+                  </div>
+                  <FieldError name="service" />
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -285,34 +434,48 @@ export default function Reservation() {
                       Date{req}
                     </label>
                     <input
+                      ref={setRef("date")}
                       id="res-date"
                       name="date"
-                      required
                       type="date"
                       min={today}
+                      aria-required="true"
+                      aria-invalid={errors.date ? "true" : undefined}
+                      aria-describedby={describedBy("date")}
                       value={form.date}
                       onChange={update("date")}
-                      className={inputClass}
+                      onBlur={handleBlur("date")}
+                      className={fieldClass("date")}
                     />
+                    <FieldError name="date" />
                   </div>
                   <div>
                     <label htmlFor="res-time" className={labelClass}>
                       Créneau
                     </label>
-                    <select
-                      id="res-time"
-                      name="time"
-                      value={form.time}
-                      onChange={update("time")}
-                      className={`${inputClass} appearance-none`}
-                    >
-                      <option value="">Indifférent</option>
-                      {SLOTS.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        ref={setRef("time")}
+                        id="res-time"
+                        name="time"
+                        value={form.time}
+                        onChange={update("time")}
+                        className={`${fieldClass("time")} appearance-none pr-11 ${
+                          form.time ? "" : "text-plum/45"
+                        }`}
+                      >
+                        <option value="">Indifférent</option>
+                        {SLOTS.map((t) => (
+                          <option key={t} value={t} className="text-plum">
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown
+                        aria-hidden="true"
+                        className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-plum/55"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -327,7 +490,7 @@ export default function Reservation() {
                     value={form.message}
                     onChange={update("message")}
                     placeholder="Une précision, une inspiration à partager ?"
-                    className={`${inputClass} resize-none`}
+                    className={`${fieldClass("message")} resize-none`}
                   />
                 </div>
 
@@ -344,18 +507,22 @@ export default function Reservation() {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="btn-primary w-full justify-center disabled:opacity-70"
+                  aria-busy={status === "loading"}
+                  className="btn-primary group w-full justify-center disabled:opacity-70"
                 >
                   {status === "loading" ? (
-                    "Envoi en cours…"
+                    <>
+                      <Spinner className="h-4 w-4 animate-spin" />
+                      Envoi en cours…
+                    </>
                   ) : (
                     <>
                       Confirmer ma demande
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </>
                   )}
                 </button>
-                <p className="text-center text-xs text-plum/50">
+                <p className="text-center text-xs text-plum/65">
                   En envoyant, vous acceptez d'être recontactée pour confirmer
                   votre rendez-vous.
                 </p>

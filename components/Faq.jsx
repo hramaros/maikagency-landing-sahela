@@ -35,7 +35,7 @@ export default function Faq() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="relative overflow-hidden bg-cream py-24 sm:py-32">
+    <section id="faq" className="relative overflow-hidden bg-cream-deep py-24 sm:py-32">
       <div className="aurora right-[-4rem] top-20 h-72 w-72 bg-blush/50" />
 
       <div className="relative mx-auto max-w-3xl px-5 sm:px-8">

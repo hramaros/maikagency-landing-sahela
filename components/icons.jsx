@@ -145,3 +145,11 @@ export function ChevronDown(props) {
     </svg>
   );
 }
+
+export function Spinner(props) {
+  return (
+    <svg viewBox="0 0 24 24" {...base} {...props}>
+      <path d="M12 3a9 9 0 1 0 9 9" />
+    </svg>
+  );
+}

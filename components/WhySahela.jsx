@@ -70,7 +70,7 @@ export default function WhySahela() {
                       ))}
                     </div>
                     <span className="text-sm font-semibold text-plum">4,9/5</span>
-                    <span className="text-sm text-plum/60">· clientes ravies</span>
+                    <span className="text-sm text-plum/65">· clientes ravies</span>
                   </div>
                 </div>
               </Reveal>

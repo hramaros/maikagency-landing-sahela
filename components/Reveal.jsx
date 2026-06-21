@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function Reveal({
   children,
@@ -10,6 +10,14 @@ export default function Reveal({
   as = "div",
 }) {
   const MotionTag = motion[as] || motion.div;
+  const reduce = useReducedMotion();
+
+  // Respect prefers-reduced-motion: render content immediately, no movement.
+  if (reduce) {
+    const Tag = as;
+    return <Tag className={className}>{children}</Tag>;
+  }
+
   return (
     <MotionTag
       className={className}
