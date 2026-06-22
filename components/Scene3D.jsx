@@ -9,10 +9,20 @@ import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 
 const MODEL_PATH = "/models/lipstick/";
 
+// Entrance: rises from below the frame with a settling spin, as if emerging
+// from behind the marquee band beneath the hero — instead of popping in
+// the instant the asset finishes loading.
+const ENTRY_START_Y = -3;
+const ENTRY_SPIN = Math.PI * 1.3;
+const ENTRY_DURATION = 1.1;
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
 /* Real product model (OBJ + MTL + texture), turntable-spun on a
    fixed tilt. No extra shapes in the canvas — lipstick only. */
 function LipstickModel() {
   const spinRef = useRef();
+  const entryRef = useRef();
+  const entryProgress = useRef(0);
 
   const materials = useLoader(MTLLoader, `${MODEL_PATH}lipstick.mtl`, (loader) => {
     loader.setResourcePath(MODEL_PATH);
@@ -41,13 +51,22 @@ function LipstickModel() {
 
   useFrame((_, delta) => {
     if (spinRef.current) spinRef.current.rotation.y += delta * 0.28;
+
+    if (entryRef.current && entryProgress.current < 1) {
+      entryProgress.current = Math.min(entryProgress.current + delta / ENTRY_DURATION, 1);
+      const eased = easeOutCubic(entryProgress.current);
+      entryRef.current.position.y = THREE.MathUtils.lerp(ENTRY_START_Y, 0, eased);
+      entryRef.current.rotation.y = THREE.MathUtils.lerp(ENTRY_SPIN, 0, eased);
+    }
   });
 
   return (
     <group ref={spinRef}>
-      {/* Fixed tilt — the lipstick leans slightly rather than standing dead upright */}
-      <group rotation={[0.18, 0, 0.24]} scale={2.3}>
-        <primitive object={obj} />
+      <group ref={entryRef} position={[0, ENTRY_START_Y, 0]} rotation={[0, ENTRY_SPIN, 0]}>
+        {/* Fixed tilt — the lipstick leans slightly rather than standing dead upright */}
+        <group rotation={[0.18, 0, 0.24]} scale={2.3}>
+          <primitive object={obj} />
+        </group>
       </group>
     </group>
   );
