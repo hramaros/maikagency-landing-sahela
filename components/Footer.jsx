@@ -1,4 +1,4 @@
-import { Instagram, Phone, MapPin, ArrowRight, Sparkle } from "./icons";
+import { Instagram, Phone, MapPin } from "./icons";
 
 const cols = [
   {
@@ -18,25 +18,8 @@ export default function Footer() {
     <footer className="relative overflow-hidden bg-ink text-cream">
       <div className="aurora left-1/4 top-[-4rem] h-72 w-72 bg-rose/15" />
 
-      {/* CTA band */}
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-plum to-plum-soft p-10 text-center shadow-2xl sm:p-16 -translate-y-16">
-          <Sparkle className="mx-auto h-8 w-8 text-rose" />
-          <h2 className="mx-auto mt-4 max-w-2xl font-display text-3xl font-semibold leading-tight sm:text-4xl">
-            Prête à révéler votre plus bel éclat ?
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-cream/70">
-            Réservez dès maintenant et laissez nos expertes prendre soin de vous.
-          </p>
-          <a href="#reserver" className="btn-primary mx-auto mt-8">
-            Réserver mon rendez-vous
-            <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-
       {/* Footer body */}
-      <div className="relative mx-auto -mt-4 max-w-7xl px-5 pb-10 sm:px-8">
+      <div className="relative mx-auto max-w-7xl px-5 pt-16 pb-10 sm:px-8">
         <div className="grid gap-10 border-b border-white/10 pb-12 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           {/* Brand */}
           <div>

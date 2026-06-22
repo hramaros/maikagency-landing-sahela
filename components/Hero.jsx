@@ -6,10 +6,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Star } from "./icons";
 
-const Scene3D = dynamic(() => import("./Scene3D"), {
-  ssr: false,
-  loading: () => <HeroVisualFallback />,
-});
+const Scene3D = dynamic(() => import("./Scene3D"), { ssr: false });
 
 /* Lightweight, motion-free decorative orb — used on small screens,
    reduced-motion, and as the 3D loading state. No WebGL cost. */
