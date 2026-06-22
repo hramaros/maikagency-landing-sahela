@@ -51,20 +51,16 @@ const avatars = [
 
 export default function Hero() {
   const reduce = useReducedMotion();
-  // Only mount the WebGL scene on large screens with motion enabled —
-  // saves significant CPU/GPU on phones and respects reduced-motion.
+  // Mount the WebGL scene whenever motion is allowed — the lipstick's
+  // entrance animation is the point of the hero on every screen size,
+  // it only falls back to the static orb when reduced-motion is set.
   const [enrich, setEnrich] = useState(false);
   useEffect(() => {
-    const big = window.matchMedia("(min-width: 1024px)");
     const motionOk = window.matchMedia("(prefers-reduced-motion: no-preference)");
-    const update = () => setEnrich(big.matches && motionOk.matches);
+    const update = () => setEnrich(motionOk.matches);
     update();
-    big.addEventListener("change", update);
     motionOk.addEventListener("change", update);
-    return () => {
-      big.removeEventListener("change", update);
-      motionOk.removeEventListener("change", update);
-    };
+    return () => motionOk.removeEventListener("change", update);
   }, []);
 
   return (
@@ -93,7 +89,12 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Text column */}
-        <motion.div variants={container} initial="hidden" animate="show">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="order-2 lg:order-1"
+        >
           <motion.h1
             variants={item}
             className="font-display text-5xl font-semibold leading-[1.04] text-plum sm:text-6xl lg:text-7xl"
@@ -177,7 +178,7 @@ export default function Hero() {
           initial={reduce ? false : { opacity: 0, scale: 0.92 }}
           animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative h-[360px] w-full sm:h-[460px] lg:h-[600px]"
+          className="relative order-1 h-[360px] w-full sm:h-[460px] lg:order-2 lg:h-[600px]"
           aria-hidden="true"
         >
           {enrich ? <Scene3D /> : <HeroVisualFallback />}
