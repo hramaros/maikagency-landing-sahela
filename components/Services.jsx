@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
-import { NailPolish, Foot, Scissors, Lipstick, Check, ArrowRight, Sparkle } from "./icons";
+import { NailPolish, Foot, Scissors, Lipstick, Check, ArrowRight, Sparkle, Clock } from "./icons";
 
 const services = [
   {
@@ -11,6 +11,7 @@ const services = [
       "Pose semi-permanente, gel et nail art sur-mesure pour des ongles impeccables qui durent.",
     features: ["Vernis semi-permanent", "Pose gel & capsules", "Nail art personnalisé", "Soin des cuticules"],
     price: "dès 30 000 Ar",
+    duration: "45 min – 1 h",
     img: "/gallery/services/manucure.jpg",
     alt: "Pose de vernis rose vif lors d'une manucure soignée",
     span: "lg:col-span-2",
@@ -24,6 +25,7 @@ const services = [
       "Un rituel spa complet : gommage, soin hydratant et vernis longue tenue pour des pieds doux.",
     features: ["Bain & gommage", "Soin spa hydratant", "Beauté des pieds", "Vernis longue tenue"],
     price: "dès 40 000 Ar",
+    duration: "≈ 1 h",
     img: "/gallery/services/pedicure.jpg",
     alt: "Moment de détente et de soin spa au salon",
     span: "lg:col-span-1",
@@ -36,6 +38,7 @@ const services = [
       "Coupe, couleur, balayage et coiffures d'exception, pensés selon votre style et votre événement.",
     features: ["Coupe & brushing", "Couleur & balayage", "Soin profond", "Coiffure événementielle"],
     price: "dès 50 000 Ar",
+    duration: "1 – 3 h",
     img: "/gallery/services/coiffure.jpg",
     alt: "Coiffeuse réalisant un brushing lumineux en salon",
     span: "lg:col-span-1",
@@ -49,6 +52,7 @@ const services = [
       "Make-up jour, soirée ou mariée réalisé par nos artistes, pour révéler le meilleur de vous-même.",
     features: ["Make-up jour & soirée", "Maquillage mariée", "Mise en beauté événement", "Cours d'auto-maquillage"],
     price: "dès 60 000 Ar",
+    duration: "45 min – 1 h 30",
     img: "/gallery/services/maquillage.jpg",
     alt: "Sélection de produits de maquillage premium sur un plan en marbre",
     span: "lg:col-span-2",
@@ -140,9 +144,15 @@ export default function Services() {
                     </ul>
 
                     <div className="mt-auto flex items-center justify-between border-t border-plum/10 pt-6">
-                      <span className="font-display text-xl font-semibold text-plum">
-                        {s.price}
-                      </span>
+                      <div>
+                        <span className="block font-display text-xl font-semibold text-plum">
+                          {s.price}
+                        </span>
+                        <span className="mt-0.5 flex items-center gap-1.5 text-sm text-plum/55">
+                          <Clock className="h-3.5 w-3.5" />
+                          {s.duration}
+                        </span>
+                      </div>
                       <a
                         href="#reserver"
                         className="inline-flex items-center gap-1.5 rounded-full px-1 text-sm font-semibold text-rose-deep transition-all hover:gap-2.5"

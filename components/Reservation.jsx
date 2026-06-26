@@ -10,6 +10,7 @@ import {
   Clock,
   Sparkle,
   Spinner,
+  Star,
 } from "./icons";
 
 const SERVICES = [
@@ -216,8 +217,35 @@ export default function Reservation() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 max-w-md text-lg text-plum/70">
-              Réservez votre rendez-vous en moins d'une minute. Nous vous
-              confirmons votre créneau par téléphone, avec le sourire.
+              Réservez votre rendez-vous en moins d'une minute, sans engagement
+              et sans paiement en ligne. Nous vous confirmons votre créneau par
+              téléphone, avec le sourire.
+            </p>
+          </Reveal>
+
+          {/* Social proof at the point of decision (Bandwagon) — existing claims only */}
+          <Reveal delay={0.12}>
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
+              <span className="flex items-center gap-2">
+                <span className="flex">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star key={i} filled className="h-4 w-4 text-gold" />
+                  ))}
+                </span>
+                <span className="text-sm font-semibold text-plum">4,9/5</span>
+              </span>
+              <span className="text-sm text-plum/65">+320 avis vérifiés</span>
+              <span className="h-1 w-1 rounded-full bg-plum/25" aria-hidden="true" />
+              <span className="text-sm text-plum/65">+12 000 clientes choyées</span>
+            </div>
+          </Reveal>
+
+          {/* Honest scarcity — mirrors the FAQ, no fabricated counters */}
+          <Reveal delay={0.16}>
+            <p className="mt-5 flex items-start gap-2 text-sm text-plum/60">
+              <Sparkle className="mt-0.5 h-4 w-4 shrink-0 text-rose" />
+              Les créneaux du week-end partent vite — réservez quelques jours à
+              l'avance.
             </p>
           </Reveal>
 
@@ -511,8 +539,8 @@ export default function Reservation() {
                   )}
                 </button>
                 <p className="text-center text-xs text-plum/65">
-                  En envoyant, vous acceptez d'être recontactée pour confirmer
-                  votre rendez-vous.
+                  Sans engagement · Aucun paiement en ligne · Réponse rapide par
+                  téléphone
                 </p>
               </form>
             )}
