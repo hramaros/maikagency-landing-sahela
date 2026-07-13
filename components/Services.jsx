@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import TiltCard from "./TiltCard";
 import { NailPolish, Foot, Scissors, Lipstick, Check, ArrowRight, Sparkle, Clock } from "./icons";
 
 const services = [
@@ -89,7 +90,8 @@ export default function Services() {
             const Icon = s.icon;
             return (
               <Reveal key={s.title} delay={i * 0.08} className={`h-full ${s.span}`}>
-                <article className="card-lux group relative flex h-full flex-col overflow-hidden">
+                <TiltCard className="h-full">
+                <article className="card-lux border-gradient-hover group relative flex h-full flex-col overflow-hidden">
                   {/* media header */}
                   <div className="relative aspect-[16/10] w-full overflow-hidden">
                     <Image
@@ -100,6 +102,7 @@ export default function Services() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-plum/55 via-plum/10 to-transparent" />
+                    <span aria-hidden="true" className="shine-sweep" />
 
                     {/* popular badge */}
                     {s.popular && (
@@ -164,6 +167,7 @@ export default function Services() {
                     </div>
                   </div>
                 </article>
+                </TiltCard>
               </Reveal>
             );
           })}

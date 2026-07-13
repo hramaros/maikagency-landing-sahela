@@ -2,9 +2,10 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Star } from "./icons";
+import { ArrowRight, Star, Sparkle } from "./icons";
+import CountUp from "./CountUp";
 
 const Scene3D = dynamic(() => import("./Scene3D"), { ssr: false });
 
@@ -33,10 +34,30 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
 
+/* Headline words rise and de-blur one by one — the text itself "se révèle". */
+const headlineContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09 } },
+};
+const wordItem = {
+  hidden: { opacity: 0, y: 28, filter: "blur(10px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const headline = [
+  ["Révélez", "l'éclat"],
+  ["qui", "sommeille"],
+];
+
 const stats = [
-  { value: "4,9/5", label: "Note moyenne" },
-  { value: "+12 000", label: "Clientes choyées" },
-  { value: "4", label: "Univers beauté" },
+  { end: 4.9, decimals: 1, suffix: "/5", label: "Note moyenne" },
+  { end: 12000, thousands: true, prefix: "+", label: "Clientes choyées" },
+  { end: 4, label: "Univers beauté" },
 ];
 
 const avatars = [
@@ -44,6 +65,16 @@ const avatars = [
   { src: "/gallery/avatars/a2.jpg", name: "Mialy" },
   { src: "/gallery/avatars/a3.jpg", name: "Hanitra" },
   { src: "/gallery/avatars/a4.jpg", name: "Tantely" },
+];
+
+/* Decorative sparkles drifting over the hero (pure CSS twinkle). */
+const sparkles = [
+  { pos: "left-[5%] top-[24%] h-5 w-5 text-rose/50", delay: "0s" },
+  { pos: "left-[40%] top-[13%] h-4 w-4 text-gold/70", delay: "1.4s" },
+  { pos: "right-[10%] top-[18%] h-6 w-6 text-champagne", delay: "0.7s" },
+  { pos: "right-[32%] bottom-[22%] h-4 w-4 text-mauve/60", delay: "2.2s" },
+  { pos: "left-[13%] bottom-[15%] h-5 w-5 text-rosegold/70", delay: "2.9s" },
+  { pos: "right-[4%] bottom-[40%] h-3.5 w-3.5 text-rose/40", delay: "3.6s" },
 ];
 
 export default function Hero() {
@@ -84,6 +115,19 @@ export default function Hero() {
         style={{ animationDelay: "-12s" }}
       />
 
+      {/* Twinkling sparkles */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {sparkles.map((s) => (
+          <span
+            key={s.pos}
+            className={`sparkle-float absolute ${s.pos}`}
+            style={{ animationDelay: s.delay }}
+          >
+            <Sparkle className="h-full w-full" />
+          </span>
+        ))}
+      </div>
+
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Text column */}
         <motion.div
@@ -93,14 +137,31 @@ export default function Hero() {
           className="order-2 lg:order-1"
         >
           <motion.h1
-            variants={item}
+            variants={headlineContainer}
             className="font-display text-5xl font-semibold leading-[1.04] text-plum sm:text-6xl lg:text-7xl"
           >
-            Révélez l'éclat
-            <br />
-            qui sommeille
-            <br />
-            <span className="text-gradient-rose">en vous.</span>
+            {headline.map((line) => (
+              <span key={line.join(" ")} className="block">
+                {line.map((word, wi) => (
+                  <Fragment key={word}>
+                    <motion.span
+                      variants={wordItem}
+                      className="inline-block will-change-transform"
+                    >
+                      {word}
+                    </motion.span>
+                    {/* real space in the DOM — screen readers & copy/paste */}
+                    {wi < line.length - 1 ? " " : null}
+                  </Fragment>
+                ))}
+              </span>
+            ))}
+            <motion.span
+              variants={wordItem}
+              className="text-shimmer-gold inline-block will-change-transform"
+            >
+              en vous.
+            </motion.span>
           </motion.h1>
 
           <motion.p
@@ -152,7 +213,7 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats — count up on first view */}
           <motion.dl
             variants={item}
             className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-plum/10 pt-6"
@@ -160,7 +221,13 @@ export default function Hero() {
             {stats.map((s) => (
               <div key={s.label}>
                 <dt className="font-display text-3xl font-semibold text-plum">
-                  {s.value}
+                  <CountUp
+                    end={s.end}
+                    decimals={s.decimals}
+                    thousands={s.thousands}
+                    prefix={s.prefix}
+                    suffix={s.suffix}
+                  />
                 </dt>
                 <dd className="mt-1 text-xs uppercase tracking-wide text-plum/70">
                   {s.label}
@@ -178,8 +245,21 @@ export default function Hero() {
           className="relative order-1 h-[360px] w-full sm:h-[460px] lg:order-2 lg:h-[600px]"
           aria-hidden="true"
         >
+          {/* Luminous rotating halo — the lipstick's stage */}
+          <div className="halo-ring inset-[4%] sm:inset-[8%]" />
           {enrich ? <Scene3D /> : <HeroVisualFallback />}
         </motion.div>
+      </div>
+
+      {/* Scroll cue */}
+      <div
+        aria-hidden="true"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex"
+      >
+        <span className="text-[10px] uppercase tracking-[0.3em] text-plum/45">
+          Découvrir
+        </span>
+        <span className="scroll-cue-track block rounded-full" />
       </div>
     </section>
   );

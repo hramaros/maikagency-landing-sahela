@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import CountUp from "./CountUp";
 import { Star, Sparkle, Check, Heart } from "./icons";
 
 const pillars = [
@@ -69,7 +70,9 @@ export default function WhySahela() {
                         <Star key={i} filled className="h-4 w-4 text-gold" />
                       ))}
                     </div>
-                    <span className="text-sm font-semibold text-plum">4,9/5</span>
+                    <span className="text-sm font-semibold text-plum">
+                      <CountUp end={4.9} decimals={1} suffix="/5" />
+                    </span>
                     <span className="text-sm text-plum/65">· clientes ravies</span>
                   </div>
                 </div>
@@ -81,8 +84,8 @@ export default function WhySahela() {
                 const Icon = p.icon;
                 return (
                   <Reveal key={p.title} delay={i * 0.08}>
-                    <div className="flex h-full gap-4 rounded-3xl border border-white/70 bg-white/70 p-6 shadow-sm transition-transform duration-500 hover:-translate-y-1">
-                      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose to-rosegold text-white shadow-sm">
+                    <div className="group flex h-full gap-4 rounded-3xl border border-white/70 bg-white/70 p-6 shadow-sm transition-transform duration-500 hover:-translate-y-1">
+                      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose to-rosegold text-white shadow-sm transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
                         <Icon className="h-6 w-6" />
                       </span>
                       <div>

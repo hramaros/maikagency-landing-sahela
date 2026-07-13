@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, useScroll } from "framer-motion";
 import { ArrowRight } from "./icons";
 
 const links = [
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -61,6 +63,12 @@ export default function Navbar() {
         scrolled ? "py-3" : "py-5"
       }`}
     >
+      {/* Scroll progress hairline */}
+      <motion.span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 block h-[2.5px] origin-left bg-gradient-to-r from-rose via-rosegold to-gold"
+        style={{ scaleX: scrollYProgress }}
+      />
       <nav
         className={`mx-auto flex max-w-7xl items-center justify-between gap-6 rounded-full px-5 py-3 transition-all duration-500 sm:px-7 ${
           scrolled

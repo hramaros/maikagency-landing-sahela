@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./Reveal";
+import BeforeAfter from "./BeforeAfter";
 import { Heart, Sparkle } from "./icons";
 
 const categories = ["Tout", "Manucure", "Pédicure", "Coiffure", "Maquillage"];
@@ -127,6 +128,13 @@ export default function Portfolio() {
             </div>
           </Reveal>
         </div>
+
+        {/* La révélation — before/after interactif */}
+        <Reveal delay={0.1}>
+          <div className="mt-14">
+            <BeforeAfter />
+          </div>
+        </Reveal>
 
         {/* Masonry gallery */}
         <motion.div layout className="mt-14 columns-1 gap-5 sm:columns-2 lg:columns-3">

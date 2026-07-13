@@ -1,3 +1,4 @@
+import Reveal from "./Reveal";
 import { Instagram, Phone, MapPin } from "./icons";
 
 const cols = [
@@ -20,6 +21,7 @@ export default function Footer() {
 
       {/* Footer body */}
       <div className="relative mx-auto max-w-7xl px-5 pt-16 pb-10 sm:px-8">
+        <Reveal>
         <div className="grid gap-10 border-b border-white/10 pb-12 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           {/* Brand */}
           <div>
@@ -27,7 +29,7 @@ export default function Footer() {
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/10 font-display text-base font-semibold italic text-gradient-rose">
                 S
               </span>
-              <span className="font-display text-xl font-semibold tracking-wide">
+              <span className="text-shimmer-gold font-display text-xl font-semibold tracking-wide">
                 Sahela
               </span>
             </div>
@@ -64,7 +66,7 @@ export default function Footer() {
                   <li key={l}>
                     <a
                       href={col.hrefs[i]}
-                      className="text-sm text-cream/65 transition hover:text-rose"
+                      className="inline-block text-sm text-cream/65 transition hover:translate-x-1 hover:text-rose"
                     >
                       {l}
                     </a>
@@ -89,6 +91,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
+        </Reveal>
 
         <div className="flex flex-col items-center justify-between gap-3 pt-7 text-sm text-cream/70 sm:flex-row">
           <p>© {new Date().getFullYear()} Sahela. Tous droits réservés.</p>

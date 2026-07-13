@@ -8,24 +8,28 @@ const team = [
     role: "Fondatrice & coloriste",
     tag: "Couleur & balayage",
     img: "/gallery/team/tahiana.jpg",
+    bio: "Quinze ans de couleur, l'œil absolu pour les nuances qui illuminent.",
   },
   {
     name: "Onja R.",
     role: "Prothésiste ongulaire",
     tag: "Nail art sur-mesure",
     img: "/gallery/team/onja.jpg",
+    bio: "Des ongles-bijoux d'une précision d'orfèvre, uniques à chacune.",
   },
   {
     name: "Fitia A.",
     role: "Maquilleuse pro",
     tag: "Make-up mariée",
     img: "/gallery/team/fitia.jpg",
+    bio: "Sublime chaque visage en respectant ce qui vous rend unique.",
   },
   {
     name: "Miora H.",
     role: "Coiffeuse & styliste",
     tag: "Coiffure événementielle",
     img: "/gallery/team/miora.jpg",
+    bio: "Des coiffures qui tiennent la nuit entière et volent la vedette.",
   },
 ];
 
@@ -65,7 +69,7 @@ export default function Team() {
                     alt={`${m.name}, ${m.role} chez Sahela`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover grayscale-[0.35] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                   />
                   {/* scrim */}
                   <div className="absolute inset-0 bg-gradient-to-t from-plum via-plum/25 to-transparent" />
@@ -90,6 +94,9 @@ export default function Team() {
                       {m.name}
                     </h3>
                     <p className="mt-0.5 text-sm font-medium text-rose">{m.role}</p>
+                    <p className="mt-0 max-h-0 overflow-hidden text-sm leading-snug text-cream/80 opacity-0 transition-all duration-500 group-hover:mt-2 group-hover:max-h-16 group-hover:opacity-100">
+                      {m.bio}
+                    </p>
                   </figcaption>
                 </div>
               </article>

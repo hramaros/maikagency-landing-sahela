@@ -188,6 +188,29 @@ button:disabled {
   pointer-events: none;
 }
 
+/* Hover-revealed gradient hairline (service cards) */
+.border-gradient-hover {
+  position: relative;
+  background-clip: padding-box;
+}
+.border-gradient-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(140deg, rgba(225, 137, 154, 0.8), rgba(151, 115, 154, 0.3), rgba(236, 210, 176, 0.7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-silk);
+}
+.border-gradient-hover:hover::after {
+  opacity: 1;
+}
+
 /* Grain overlay */
 .grain::before {
   content: "";
@@ -263,6 +286,25 @@ button:disabled {
   100% { opacity: 0; }
 }
 
+/* Fascination layer — révélation motion kit */
+@keyframes shimmer-text {
+  to { background-position: -220% center; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+  50% { opacity: 0.95; transform: scale(1.15) rotate(28deg); }
+}
+
+@keyframes halo-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scroll-cue {
+  0% { transform: translateY(-110%); }
+  55%, 100% { transform: translateY(110%); }
+}
+
 .animate-float-slow { animation: float-slow 9s var(--ease-silk) infinite; }
 .animate-drift { animation: drift 18s ease-in-out infinite; }
 .animate-marquee { animation: marquee 32s linear infinite; }
@@ -279,6 +321,85 @@ button:disabled {
   );
   background-size: 200% 100%;
   animation: shimmer 3.5s linear infinite;
+}
+
+/* Animated rose→gold shimmer text — the « révélation » accent.
+   Falls back to a static gradient when reduced-motion kills the animation. */
+.text-shimmer-gold {
+  background: linear-gradient(
+    110deg,
+    #e1899a 18%,
+    #c9974f 38%,
+    #f7e6c8 50%,
+    #c9974f 62%,
+    #e1899a 82%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-text 6s linear infinite;
+}
+
+/* Floating sparkle particles (decorative, aria-hidden) */
+.sparkle-float {
+  animation: twinkle 4.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Luminous rotating halo ring — the lipstick's stage */
+.halo-ring {
+  position: absolute;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(225, 137, 154, 0.55),
+    rgba(236, 210, 176, 0.18),
+    rgba(201, 151, 79, 0.45),
+    rgba(151, 115, 154, 0.22),
+    rgba(225, 137, 154, 0.55)
+  );
+  filter: blur(26px);
+  -webkit-mask: radial-gradient(closest-side, transparent 50%, #000 66%, #000 80%, transparent 94%);
+  mask: radial-gradient(closest-side, transparent 50%, #000 66%, #000 80%, transparent 94%);
+  animation: halo-spin 28s linear infinite;
+  pointer-events: none;
+}
+
+/* Hero scroll cue — thin pulsing line */
+.scroll-cue-track {
+  position: relative;
+  width: 1px;
+  height: 3rem;
+  overflow: hidden;
+  background: rgba(36, 21, 38, 0.12);
+}
+.scroll-cue-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, var(--color-rose-deep), transparent);
+  animation: scroll-cue 2.4s var(--ease-silk) infinite;
+}
+
+/* Shine sweep across card media on hover (pairs with Tailwind `group`) */
+.shine-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 65%
+  );
+  background-size: 260% 100%;
+  background-position: 215% center;
+  transition: background-position 0.9s var(--ease-silk);
+}
+.group:hover .shine-sweep {
+  background-position: -115% center;
 }
 
 /* ------------------------------------------------------------------ */
