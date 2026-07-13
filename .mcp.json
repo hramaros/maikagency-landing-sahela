@@ -6,6 +6,14 @@
       "env": {
         "API_KEY": "${MAGIC_API_KEY}"
       }
+    },
+    "tripo-mcp": {
+      "command": "uvx",
+      "args": ["tripo-mcp"]
+    },
+    "free3d": {
+      "command": "uv",
+      "args": ["run", "--directory", "scripts/free3d", "free3d-mcp"]
     }
   }
 }

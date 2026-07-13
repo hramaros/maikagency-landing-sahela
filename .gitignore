@@ -33,3 +33,13 @@ next-env.d.ts
 # Python cache (skill scripts)
 __pycache__/
 *.pyc
+
+# Tripo Blender bridge runtime (pid/log)
+scripts/tripo/.run/
+
+# free3d pipeline scratch (intermediate PNG/GLB)
+scripts/free3d/.run/
+scripts/free3d/.venv/
+
+# impeccable hook cache
+.impeccable/
