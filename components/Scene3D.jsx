@@ -1,13 +1,11 @@
 "use client";
 
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Environment, Lightformer } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Environment, Lightformer, useGLTF } from "@react-three/drei";
 import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
-import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
-import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 
-const MODEL_PATH = "/models/lipstick/";
+const MODEL_URL = "/models/lipstick/model.glb";
 
 // Entrance: rises from below the frame with a settling spin, as if emerging
 // from behind the marquee band beneath the hero — instead of popping in
@@ -17,37 +15,30 @@ const ENTRY_SPIN = Math.PI * 1.3;
 const ENTRY_DURATION = 1.1;
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
-/* Real product model (OBJ + MTL + texture), turntable-spun on a
-   fixed tilt. No extra shapes in the canvas — lipstick only. */
+/* Real product model (GLB, PBR), turntable-spun on a fixed tilt.
+   No extra shapes in the canvas — lipstick only. The GLB is produced by the
+   free3d pipeline (scripts/free3d) or converted from a source model; its
+   baked texture is kept, we only nudge roughness/metalness to catch the
+   environment lighting the way the hero was tuned for. */
 function LipstickModel() {
   const spinRef = useRef();
   const entryRef = useRef();
   const entryProgress = useRef(0);
 
-  const materials = useLoader(MTLLoader, `${MODEL_PATH}lipstick.mtl`, (loader) => {
-    loader.setResourcePath(MODEL_PATH);
-  });
-  const obj = useLoader(OBJLoader, `${MODEL_PATH}lipstick.obj`, (loader) => {
-    materials.preload();
-    loader.setMaterials(materials);
-  });
+  const { scene } = useGLTF(MODEL_URL);
 
-  // Upgrade the baked Phong material to a PBR material so it responds
-  // nicely to the environment lighting, while keeping the original texture.
   useEffect(() => {
-    obj.traverse((child) => {
+    scene.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
-        const map = child.material?.map ?? null;
-        child.material = new THREE.MeshStandardMaterial({
-          map,
-          roughness: 0.32,
-          metalness: 0.12,
-        });
+        if (child.material) {
+          child.material.roughness = 0.32;
+          child.material.metalness = 0.12;
+        }
       }
     });
-  }, [obj]);
+  }, [scene]);
 
   useFrame((_, delta) => {
     if (spinRef.current) spinRef.current.rotation.y += delta * 0.28;
@@ -65,7 +56,7 @@ function LipstickModel() {
       <group ref={entryRef} position={[0, ENTRY_START_Y, 0]} rotation={[0, ENTRY_SPIN, 0]}>
         {/* Fixed tilt — the lipstick leans slightly rather than standing dead upright */}
         <group rotation={[0.18, 0, 0.24]} scale={2.3}>
-          <primitive object={obj} />
+          <primitive object={scene} />
         </group>
       </group>
     </group>
@@ -121,3 +112,5 @@ export default function Scene3D() {
     </Canvas>
   );
 }
+
+useGLTF.preload(MODEL_URL);
